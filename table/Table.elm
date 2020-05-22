@@ -1,10 +1,12 @@
 import Html exposing (text)
 main = text
-    <| Debug.toString
+    -- <| Debug.toString
+    <| show 
+    <| get_table "marosova_tabulka"
     <| empty "adamova_tabulka"
     <| insert "marosova_tabulka" "mama" "maros" 
     <| insert "marosova_tabulka" "mama" "ema" 
-    <| [({ name = "marosova_tabulka" },[("key", "value")]), ({ name = "adamova_tabulka" },[("key", "value")])]
+    <| [({ name = "marosova_tabulka" },[("key", "value"), ("Johan", "skala")]), ({ name = "adamova_tabulka" },[("key", "value")])]
 
 
 
@@ -89,5 +91,26 @@ insert name key value memory =
             else first:: insert name key value rest
 
 -------------------------------------------------------------------
+   
+----------------------- show --------------------------------------
+
+-- Transforms [items] from table to string. Pattern is key: value, ... 
+show_table_items: List Item -> String
+show_table_items items = 
+    case items of
+        [] -> ""
+        ( key, value )::rest ->
+            key ++ ": " ++  value ++ ", " ++ show_table_items rest
+
+-- Transforms table to string. Takes table of Nothing (get_table) returns Maybe Table
+show: Maybe Table -> String
+show table = 
+    case table of
+        Nothing -> ""
+        Just t -> 
+            show_table_items
+            <| get_items t
+
+----------------------------------------------------------------------
    
 
