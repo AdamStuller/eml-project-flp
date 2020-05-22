@@ -1,29 +1,10 @@
 module Table exposing (Memory, Table, empty, insert, show, showRep, isIn, value_of, remove, card, dom, equal, get_names)
-import Html exposing (text)
 import Set
-main = text
-    <| Debug.toString
-
-    <| remove "marosova_tabulka"  "Johan"
-    -- <| equal "monikina_tabulka" "marosova_tabulka"
-    -- <| show "monikina_tabulka"
-    -- <| get_table "marosova_tabulka"
-    -- <| empty "monikina_tabulka"
-    -- <| empty "adamova_tabulka"
-    <| insert "monikina_tabulka" "mama" "maros"
-    <| insert "marosova_tabulka" "mama" "maros" 
-    <| insert "marosova_tabulka" "mama" "ema" 
-    <| [( "marosova_tabulka" ,[ ("Johan", "skala"), ("key", "value")]), ( "adamova_tabulka" ,[("key", "value")]), ( "monikina_tabulka" ,[("key", "value"), ("Johan", "skala")])]
-
-
-
--- Model for application 
-
 
 -- One item in table -> Tuple of key and value
 type alias Item = ( String, String )
 
--- Name of table, contains usefull information
+-- Name of table
 type alias Name = String 
 
 -- Table type -> Consists of Name and List of Items
@@ -59,6 +40,7 @@ get_table name memory =
             then Just first
             else get_table name rest   
 
+-- Maps tables from memory to list of names
 get_names: Memory -> List String
 get_names memory =
     List.map (\ table -> get_name table ) memory
@@ -102,7 +84,7 @@ insert name key value memory =
 
 -------------------------------------------------------------------
    
------------------------ show ad showRep --------------------------------------
+----------------------- show and showRep --------------------------------------
 
 -------------------------- helpers -----------------------------------------
 

@@ -27,7 +27,7 @@ type alias Model =
     }
 
 init: Model
-init = { memory= [( "marosova_tabulka" ,[ ("Johan", "skala"), ("key", "value")])]
+init = { memory= [( "dummy_table1" ,[ ("key1", "value1"), ("key2", "value2")]), ( "dummy_table2" ,[])]
     , name_input = ""
     , key_input = ""
     , value_input = ""
@@ -108,6 +108,7 @@ view model =
     div [style "marginLeft" "20px"]
     [ h3 [][text "Praca so zoznamom"]
     , div [][text "Vstupy:"]
+    , br [][]
     , viewInput "text" "Meno zoznamu" model.name_input NameInput
     , br [][]
     , viewInput "text" "Kluc prvku" model.key_input KeyInput
@@ -141,12 +142,15 @@ view model =
     , br [][]
     ,h3 [][text "Porovnavanie zoznamov"]
     , div [][text "Vstupy:"]
+    , br [][]
     , viewInput "text" "Zoznam 1" model.compare1 Compare1Input
     , br [][]
     , viewInput "text" "Zoznam 2" model.compare2 Compare2Input
     , br [][]
     , br [][]
     , button [ onClick Compare ] [ text "Porovnaj" ]
+    , br [][]
+    , br [][]
     , div [][text <| "Zadane zoznamy sa rovnaju: " ++ boolToString model.equal_output]
 
     ]
