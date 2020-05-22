@@ -1,7 +1,7 @@
 import Html exposing (text)
 main = text
     <| Debug.toString
-    <| isIn "monikina_tabulka"  "key1"
+    <| value_of "marosova_tabulka"  "mama"
     -- <| showRep
     -- <| get_table "marosova_tabulka"
     -- <| empty "adamova_tabulka"
@@ -164,6 +164,28 @@ isIn name key memory =
         case table of
             Nothing -> False
             Just t -> is_in_items key (get_items t)
-    
+
+----------------------------- value ---------------------------------------------
+
+-- Gets value belonging to [key] from [items] or Nothing, if no such key in items
+value_from_items: String -> List Item -> Maybe String
+value_from_items key items =
+    case items of
+        [] -> Nothing
+        (key1,v)::rest ->
+            if key1 == key 
+            then Just v
+            else value_from_items key rest
+
+-- Gets value belongin to [key] in table with [name] from [memory] or Nothing if either no such table or key in table
+value_of: String -> String -> Memory -> Maybe String
+value_of name key memory =
+    let 
+        table = get_table name memory
+    in
+        case table of
+            Nothing -> Nothing
+            Just t -> value_from_items key (get_items t)
+            
    
 
