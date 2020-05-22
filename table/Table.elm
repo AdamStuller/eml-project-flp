@@ -1,7 +1,7 @@
 import Html exposing (text)
 main = text
     -- <| Debug.toString
-    <| show 
+    <| showRep
     <| get_table "marosova_tabulka"
     <| empty "adamova_tabulka"
     <| insert "marosova_tabulka" "mama" "maros" 
@@ -92,25 +92,54 @@ insert name key value memory =
 
 -------------------------------------------------------------------
    
------------------------ show --------------------------------------
+----------------------- show ad showRep --------------------------------------
 
--- Transforms [items] from table to string. Pattern is key: value, ... 
-show_table_items: List Item -> String
-show_table_items items = 
+-------------------------- helpers -----------------------------------------
+
+-- Transforms [item] to string. Pattern: key: value 
+show_item_dummy: Item -> String
+show_item_dummy ( key, value ) =
+    key ++ ": " ++  value ++ ", "
+
+-- Transforms [item] to string. Pattern: ( "key": "value")
+show_item_real: Item -> String
+show_item_real ( key, value ) =
+    "( \"" ++ key ++ "\", \"" ++ value ++ "\" )," 
+
+-- Transforms [items] from list of items to string. Pattern is  set by [show_function]
+show_items:  ( Item -> String ) ->  List Item -> String
+show_items show_function items = 
     case items of
         [] -> ""
-        ( key, value )::rest ->
-            key ++ ": " ++  value ++ ", " ++ show_table_items rest
+        first::rest ->
+            (show_function first) ++ show_items  show_function rest
 
--- Transforms table to string. Takes table of Nothing (get_table) returns Maybe Table
+-- Transforms header to string, shows only name of table
+show_header: Header -> String
+show_header header =
+    header.name
+
+------------------------- main functions------------------------------------
+
+-- Transforms table to string. Takes table of Nothing (get_table returns Maybe Table)
+-- Show only items, naive representation
 show: Maybe Table -> String
 show table = 
     case table of
         Nothing -> ""
         Just t -> 
-            show_table_items
+            show_items show_item_dummy
             <| get_items t
 
-----------------------------------------------------------------------
+-- Transforms table to string. Takes table of Nothing (get_table returns Maybe Table)
+-- Shows header as well, real representation
+showRep:  Maybe Table -> String
+showRep table =
+    case table of
+        Nothing -> ""
+        Just t -> 
+            "( \"" ++ show_header (get_header t) ++ "\", [" ++ show_items show_item_real (get_items t) ++ " ])" 
+        
+----------------------------------------------------------------------------------
    
 
