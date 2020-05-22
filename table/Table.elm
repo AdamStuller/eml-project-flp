@@ -1,14 +1,17 @@
 import Html exposing (text)
+import Set
 main = text
     <| Debug.toString
     -- <| remove "marosova_tabulka"  "Johan"
-    <| dom "adamova_tabulka"
+    <| equal "monikina_tabulka" "marosova_tabulka"
     -- <| showRep
     -- <| get_table "marosova_tabulka"
+    -- <| empty "monikina_tabulka"
     -- <| empty "adamova_tabulka"
+    <| insert "monikina_tabulka" "mama" "maros"
     <| insert "marosova_tabulka" "mama" "maros" 
     <| insert "marosova_tabulka" "mama" "ema" 
-    <| [({ name = "marosova_tabulka" },[("key", "value"), ("Johan", "skala")]), ({ name = "adamova_tabulka" },[("key", "value")])]
+    <| [({ name = "marosova_tabulka" },[ ("Johan", "skala"), ("key", "value")]), ({ name = "adamova_tabulka" },[("key", "value")]), ({ name = "monikina_tabulka" },[("key", "value"), ("Johan", "skala")])]
 
 
 
@@ -242,4 +245,32 @@ dom name memory =
             Just t -> List.map (\ (key, value)  -> key) ( get_items t )
 
 --------------------------------------------------------------------------------------
+
+-------------------------------- equal --------------------------------------------
+
+-- Compares two lists of items. Uses Set.
+equal_list: List Item -> List Item -> Bool
+equal_list items1 items2 =
+    let 
+        len1 = List.length items1
+        len2 = List.length items2
+    in
+        if len1 > len2 
+        then Set.isEmpty <| Set.diff (Set.fromList items1) (Set.fromList items2)
+        else Set.isEmpty <| Set.diff (Set.fromList items2) (Set.fromList items1)
+        
+
+-- Compares two tables from [memory]. If either of tables with submitted [names] not present in memory, returns False. 
+equal: String -> String -> Memory -> Bool
+equal name1 name2 memory =
+    let 
+        table1 = get_table name1 memory
+        table2 = get_table name2 memory
+    in
+        case table1 of  
+            Nothing -> False
+            Just t1 ->
+                case table2 of 
+                    Nothing -> False
+                    Just t2 -> equal_list (get_items t1) (get_items  t2)
 
