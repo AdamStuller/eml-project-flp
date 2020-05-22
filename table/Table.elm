@@ -1,10 +1,10 @@
 import Html exposing (text)
 import Set
 main = text
-    <| Debug.toString
+    -- <| Debug.toString
     -- <| remove "marosova_tabulka"  "Johan"
-    <| equal "monikina_tabulka" "marosova_tabulka"
-    -- <| showRep
+    -- <| equal "monikina_tabulka" "marosova_tabulka"
+    <| show "monikina_tabulka"
     -- <| get_table "marosova_tabulka"
     -- <| empty "monikina_tabulka"
     -- <| empty "adamova_tabulka"
@@ -126,24 +126,30 @@ show_header header =
 
 ------------------------- main functions------------------------------------
 
--- Transforms table to string. Takes table of Nothing (get_table returns Maybe Table)
+-- Transforms table to string. Takes name of table in memory. If no table with such name in memory "" is returned.
 -- Show only items, naive representation
-show: Maybe Table -> String
-show table = 
-    case table of
-        Nothing -> ""
-        Just t -> 
-            show_items show_item_dummy
-            <| get_items t
+show: String -> Memory -> String
+show name memory = 
+    let
+        table = get_table name memory
+    in 
+        case table of
+            Nothing -> ""
+            Just t -> 
+                show_items show_item_dummy
+                <| get_items t
 
--- Transforms table to string. Takes table of Nothing (get_table returns Maybe Table)
+-- Transforms table to string. Takes name of table in memory. If no table with such name in memory "" is returned.
 -- Shows header as well, real representation
-showRep:  Maybe Table -> String
-showRep table =
-    case table of
-        Nothing -> ""
-        Just t -> 
-            "( \"" ++ show_header (get_header t) ++ "\", [" ++ show_items show_item_real (get_items t) ++ " ])" 
+showRep: String -> Memory -> String
+showRep name memory = 
+    let
+        table = get_table name memory
+    in 
+        case table of
+            Nothing -> ""
+            Just t -> 
+                "( \"" ++ show_header (get_header t) ++ "\", [" ++ show_items show_item_real (get_items t) ++ " ])" 
         
 ----------------------------------------------------------------------------------
 
@@ -274,3 +280,4 @@ equal name1 name2 memory =
                     Nothing -> False
                     Just t2 -> equal_list (get_items t1) (get_items  t2)
 
+----------------------------------------------------------------------------------------
