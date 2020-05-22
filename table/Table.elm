@@ -1,7 +1,7 @@
 import Html exposing (text)
 main = text
     <| Debug.toString
-    <| value_of "marosova_tabulka"  "mama"
+    <| remove "marosova_tabulka"  "Johan"
     -- <| showRep
     -- <| get_table "marosova_tabulka"
     -- <| empty "adamova_tabulka"
@@ -72,14 +72,14 @@ empty name memory =
 -- Helper function
 -- Inserts new entry to items in table, tables [items] and [key] with [value].
 -- Returns new list of items 
-insert_to_table:  String -> String -> List Item -> List Item
-insert_to_table  key value items =
+insert_to_items:  String -> String -> List Item -> List Item
+insert_to_items  key value items =
     case items of
         [] -> [(key, value)] 
         first :: rest -> 
             if Tuple.first first == key
             then (key, value) :: rest 
-            else first :: insert_to_table key value rest
+            else first :: insert_to_items key value rest
 
 -- Inserts item into given memory, takes [name] of table, [key] nad [value] for entry and [memory]
 insert: String -> String -> String -> Memory -> Memory
@@ -88,7 +88,7 @@ insert name key value memory =
         [] -> []
         first :: rest -> 
             if is_table name first
-            then ( get_header first, insert_to_table key value (get_items first) ) :: rest
+            then ( get_header first, insert_to_items key value (get_items first) ) :: rest
             else first:: insert name key value rest
 
 -------------------------------------------------------------------
@@ -187,5 +187,30 @@ value_of name key memory =
             Nothing -> Nothing
             Just t -> value_from_items key (get_items t)
             
-   
+
+--------------------------------------------------------------------------------
+------------------------- Remove ----------------------------------------------
+
+-- Removes item identified by [key] from [items] if present
+remove_from_items: String -> List Item -> List Item
+remove_from_items key items =
+    case items of   
+        [] -> []
+        (key1,value)::rest ->  
+            if  key == key1
+            then remove_from_items key rest
+            else (key1,value) :: remove_from_items key rest
+
+-- removes item identified by [key] from table named [name] from [memory]
+remove: String -> String -> Memory -> Memory
+remove name key memory =
+    case memory of 
+            [] -> []
+            first :: rest -> 
+                if is_table name first
+                then ( get_header first, remove_from_items key (get_items first) ) :: rest
+                else first :: remove name key rest
+
+-----------------------------------------------------------------------------------
+    
 
