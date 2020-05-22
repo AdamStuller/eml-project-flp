@@ -1,17 +1,19 @@
+module Table exposing (Memory, Table, empty, insert, show, showRep, isIn, value_of, remove, card, dom, equal, get_names)
 import Html exposing (text)
 import Set
 main = text
-    -- <| Debug.toString
-    -- <| remove "marosova_tabulka"  "Johan"
+    <| Debug.toString
+
+    <| remove "marosova_tabulka"  "Johan"
     -- <| equal "monikina_tabulka" "marosova_tabulka"
-    <| show "monikina_tabulka"
+    -- <| show "monikina_tabulka"
     -- <| get_table "marosova_tabulka"
     -- <| empty "monikina_tabulka"
     -- <| empty "adamova_tabulka"
     <| insert "monikina_tabulka" "mama" "maros"
     <| insert "marosova_tabulka" "mama" "maros" 
     <| insert "marosova_tabulka" "mama" "ema" 
-    <| [({ name = "marosova_tabulka" },[ ("Johan", "skala"), ("key", "value")]), ({ name = "adamova_tabulka" },[("key", "value")]), ({ name = "monikina_tabulka" },[("key", "value"), ("Johan", "skala")])]
+    <| [( "marosova_tabulka" ,[ ("Johan", "skala"), ("key", "value")]), ( "adamova_tabulka" ,[("key", "value")]), ( "monikina_tabulka" ,[("key", "value"), ("Johan", "skala")])]
 
 
 
@@ -21,11 +23,11 @@ main = text
 -- One item in table -> Tuple of key and value
 type alias Item = ( String, String )
 
--- Header of table, contains usefull information
-type alias Header = { name: String }  
+-- Name of table, contains usefull information
+type alias Name = String 
 
--- Table type -> Consists of Header and List of Items
-type alias Table = ( Header, List Item )
+-- Table type -> Consists of Name and List of Items
+type alias Table = ( Name, List Item )
 
 -- All tables, this is modified by all functions
 type alias Memory = List Table
@@ -35,11 +37,11 @@ type alias Memory = List Table
 -- Checks if given [table] has given [name]
 is_table: String -> Table -> Bool
 is_table name table =
-    (Tuple.first table).name == name 
+    Tuple.first table == name 
 
 -- Returns header from table
-get_header: Table -> Header
-get_header table =
+get_name: Table -> Name
+get_name table =
     Tuple.first table
 
 -- Returns items from table
@@ -57,6 +59,9 @@ get_table name memory =
             then Just first
             else get_table name rest   
 
+get_names: Memory -> List String
+get_names memory =
+    List.map (\ table -> get_name table ) memory
 
 ------------------------- Empty ---------------------------------------------------
 -- Takes name of table, memory with tables and returns new memory, with empty table with [name]
@@ -64,10 +69,10 @@ get_table name memory =
 empty: String -> Memory -> Memory
 empty name memory =
     case memory of
-        [] -> [(Header name, [])]
+        [] -> [( name, [])]
         first :: rest -> 
             if is_table name first 
-            then (Header name, []) :: rest
+            then ( name, []) :: rest
             else first :: empty name rest
 
 ------------------------------------------------------------------------------------
@@ -92,7 +97,7 @@ insert name key value memory =
         [] -> []
         first :: rest -> 
             if is_table name first
-            then ( get_header first, insert_to_items key value (get_items first) ) :: rest
+            then ( get_name first, insert_to_items key value (get_items first) ) :: rest
             else first:: insert name key value rest
 
 -------------------------------------------------------------------
@@ -117,12 +122,7 @@ show_items show_function items =
     case items of
         [] -> ""
         first::rest ->
-            (show_function first) ++ show_items  show_function rest
-
--- Transforms header to string, shows only name of table
-show_header: Header -> String
-show_header header =
-    header.name
+            show_function first ++ show_items  show_function rest
 
 ------------------------- main functions------------------------------------
 
@@ -149,7 +149,7 @@ showRep name memory =
         case table of
             Nothing -> ""
             Just t -> 
-                "( \"" ++ show_header (get_header t) ++ "\", [" ++ show_items show_item_real (get_items t) ++ " ])" 
+                "( \"" ++ get_name t ++ "\", [" ++ show_items show_item_real (get_items t) ++ " ])" 
         
 ----------------------------------------------------------------------------------
 
@@ -160,7 +160,7 @@ is_in_items: String -> List Item -> Bool
 is_in_items key items =
     case items of 
         [] -> False
-        (key1,value)::rest ->
+        (key1,_)::rest ->
             if key1 == key
             then True
             else is_in_items key rest
@@ -218,7 +218,7 @@ remove name key memory =
             [] -> []
             first :: rest -> 
                 if is_table name first
-                then ( get_header first, remove_from_items key (get_items first) ) :: rest
+                then ( get_name first, remove_from_items key (get_items first) ) :: rest
                 else first :: remove name key rest
 
 -----------------------------------------------------------------------------------
@@ -248,7 +248,7 @@ dom name memory =
     in  
         case table of 
             Nothing -> []
-            Just t -> List.map (\ (key, value)  -> key) ( get_items t )
+            Just t -> List.map (\ (key, _)  -> key) ( get_items t )
 
 --------------------------------------------------------------------------------------
 
