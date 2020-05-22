@@ -1,9 +1,10 @@
 import Html exposing (text)
 main = text
-    -- <| Debug.toString
-    <| showRep
-    <| get_table "marosova_tabulka"
-    <| empty "adamova_tabulka"
+    <| Debug.toString
+    <| isIn "monikina_tabulka"  "key1"
+    -- <| showRep
+    -- <| get_table "marosova_tabulka"
+    -- <| empty "adamova_tabulka"
     <| insert "marosova_tabulka" "mama" "maros" 
     <| insert "marosova_tabulka" "mama" "ema" 
     <| [({ name = "marosova_tabulka" },[("key", "value"), ("Johan", "skala")]), ({ name = "adamova_tabulka" },[("key", "value")])]
@@ -141,5 +142,28 @@ showRep table =
             "( \"" ++ show_header (get_header t) ++ "\", [" ++ show_items show_item_real (get_items t) ++ " ])" 
         
 ----------------------------------------------------------------------------------
+
+------------------------------ isIn ----------------------------------------------
+
+-- Checks if [key] is present list of [items]
+is_in_items: String -> List Item -> Bool
+is_in_items key items =
+    case items of 
+        [] -> False
+        (key1,value)::rest ->
+            if key1 == key
+            then True
+            else is_in_items key rest
+
+-- Checks if [key] is in table with [name]
+isIn: String -> String -> Memory -> Bool
+isIn name key memory =
+    let 
+        table = get_table name memory
+    in
+        case table of
+            Nothing -> False
+            Just t -> is_in_items key (get_items t)
+    
    
 
