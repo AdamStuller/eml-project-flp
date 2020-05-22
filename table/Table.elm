@@ -2,7 +2,7 @@ import Html exposing (text)
 main = text
     <| Debug.toString
     -- <| remove "marosova_tabulka"  "Johan"
-    <| card "monikina_tabulka"
+    <| dom "adamova_tabulka"
     -- <| showRep
     -- <| get_table "marosova_tabulka"
     -- <| empty "adamova_tabulka"
@@ -229,5 +229,17 @@ card name memory =
 
 ------------------------------------------------------------------------------------
 
-    
+--------------------------------- dom ---------------------------------------------
+
+-- Gets list of keys from table by [name]
+dom: String -> Memory -> List String
+dom name memory =
+    let 
+        table = get_table  name memory
+    in  
+        case table of 
+            Nothing -> []
+            Just t -> List.map (\ (key, value)  -> key) ( get_items t )
+
+--------------------------------------------------------------------------------------
 
