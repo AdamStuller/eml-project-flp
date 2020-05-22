@@ -1,7 +1,8 @@
 import Html exposing (text)
 main = text
     <| Debug.toString
-    <| remove "marosova_tabulka"  "Johan"
+    -- <| remove "marosova_tabulka"  "Johan"
+    <| card "monikina_tabulka"
     -- <| showRep
     -- <| get_table "marosova_tabulka"
     -- <| empty "adamova_tabulka"
@@ -212,5 +213,21 @@ remove name key memory =
                 else first :: remove name key rest
 
 -----------------------------------------------------------------------------------
+
+------------------------------ card --------------------------------------------
+
+-- Returns number of items in table identified by [name] in [memory]
+card: String -> Memory -> Int
+card name memory =
+    let 
+        table = get_table name memory
+    in  
+        case table of
+            Nothing -> 0
+            Just t -> 
+                List.length (get_items t)
+
+------------------------------------------------------------------------------------
+
     
 
