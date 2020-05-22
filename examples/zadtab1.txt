@@ -1,0 +1,50 @@
+Zadanie z jazyka Elm.
+
+Udajovy typ tabulka.
+
+Tabulka obsahuje prvky, ktore su dvojicou - kluc a hodnota.
+
+Tabulka je reprezentovana dvojicou, kde prvy prvok je meno 
+tabulky a druhy prvok je zoznam, ktory obsahuje dvojice 
+kluc hodnota.
+("NazovTabulky",[("kluc1","hodn1"),("kluc2","h2"),("kluc3","hodn1")])
+Kluce sa nemozu opakovat, u prvkov na tom nezalezi. Nazov, kluce aj
+hodnoty su retazce.
+
+Pre pracu s tabulkou implementujte tieto funkcie:
+
+empty <meno>
+  -- vytvori novu prazdnu tabulku, ak uz existuje, tak ju vyprazdni
+insert <meno> <kluc> <hodnota>
+  -- vlozi prvok do existujucej tabulky, ak kluc existuje, hodnotu
+  -- prepise, ak nie je zadana ziadna hodnota, tak funguje ako
+  -- remove
+show <meno>
+  -- vypise hodnotu tabulky (vsetky prvky) v tvare kluc: hodnota
+showRep <meno>
+  -- vypise celu reprezentujucu strukturu zoznam aj s dvojicami
+  -- (zobrazi skutocnu reprezentaciu tabulky)
+isIn <meno> <kluc>
+  -- vypise, ci sa kluc v tabulke nachadza alebo nenachadza
+Value <meno> <kluc>
+  -- vrati hodnotu prislusnu ku klucu
+remove <meno> <kluc>
+  -- vymaze prvok (kluc aj hodnotu) z mnoziny
+card <meno>
+  -- pocet prvkov tabulky
+dom <meno>
+  -- vrati zoznam klucov tabulky
+equal <meno1> <meno2>
+  -- test, ci su tabulky ekvivalentne (obsahuju rovnaku mnozinu prvkov)
+
+K praci z tabulkami je potrebne vytvorit aj pouzivatelske rozhranie 
+a osetrit pripadne nevhodne alebo chybajuce vstupy.
+Mozete vyuzit a prisposobit Prikladzoznam.elm, kde uz mate vytvorene 
+nejake rozhranie a priklady jednoduchych funkcii. V priklade je potrebne 
+pozmenit model, aby ste dodrzali pozadovanu reprezentaciu.
+Je nutne dodrzat uvedenu reprezentaciu. Rozhranie a pracu s rozhranim 
+si mozete definovat vlastne.
+
+Pokuste sa vyuzivat/vytvarat funkcionaly. Mozete definovat niektore 
+funkcie aj klasicky aj ako funkcional (a urobit na to napriklad 
+dve tlacidla alebo jednu z nich zakomentovat).

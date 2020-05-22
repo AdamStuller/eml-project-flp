@@ -1,0 +1,40 @@
+Vyh¾adávanie v postupostiach (typicky zoznamoch) èasto vyaduje
+vráti vısledok ako typ Maybe a.
+Príkladom je nájdenie minimálneho prvku.
+Ak je zoznam prázdny, vrátime Nothing, inak menšiu hodnotu
+z prvého prvku zoznamu a minima zo zvyšku zoznamu.
+Pretoe minimum zoz zoznamu je Maybe a, je potrebné
+si definova vhodnú pomocnú funkciu, ktorá vráti
+minimum z hodnoty a mono hodnoty:
+
+maybeMin : comparable -> Maybe comparable -> Maybe comparable
+maybeMin a ma =
+  case ma of
+    Nothing -> Just a
+    Just j -> if a < j then Just a else ma
+
+najdiMin : List comparable -> Maybe comparable
+najdiMin zoz =
+  case zoz of
+    [] -> Nothing
+    f :: r -> maybeMin f (najdiMin r)
+
+Funkcie, ktoré na to nadväzujú, musia samozrejme vedie spracova
+monú hodnotu.
+
+Preto sa v prípadoch, keï je to moné, snaíme
+vyhnú vráteniu hodnoty Nothing pre prázdny zoznam.
+
+Jednou z moností je zoznam obsahujúci podzoznamy.
+Ak máme vráti napríklad podzoznam, ktorı je najdlhší,
+Vrátime pre prázdny vstupnı zoznam znovu prázdny zoznam, ako keby ho
+vstupnı zoznam obsahoval. Potom môeme v rekurzívnom volaní
+vyui funkciu, ktorá z dvoch zoznamov vráti ten dlhší.
+
+Inou monosou je súèet prvkov zoznamu, kedy pre prázdny
+zoznam definujeme ako súèet hodnotu 0. Zjednoduší to definíciu
+funkcie a v ïalšom spracovaní by sme aj tak museli nahradi
+Nothing nejakou vhodnou hodnotou, typicky nulovım prvkom,
+ktorı je pre sèitovanie práve 0.
+
+Pri súèine hodnôt je takım nulovım prvkom hodnota 1.
