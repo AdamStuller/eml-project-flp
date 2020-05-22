@@ -178,23 +178,23 @@ isIn name key memory =
 ----------------------------- value ---------------------------------------------
 
 -- Gets value belonging to [key] from [items] or Nothing, if no such key in items
-value_from_items: String -> List Item -> Maybe String
+value_from_items: String -> List Item -> String
 value_from_items key items =
     case items of
-        [] -> Nothing
+        [] -> ""
         (key1,v)::rest ->
             if key1 == key 
-            then Just v
+            then v
             else value_from_items key rest
 
 -- Gets value belongin to [key] in table with [name] from [memory] or Nothing if either no such table or key in table
-value_of: String -> String -> Memory -> Maybe String
+value_of: String -> String -> Memory -> String
 value_of name key memory =
     let 
         table = get_table name memory
     in
         case table of
-            Nothing -> Nothing
+            Nothing -> ""
             Just t -> value_from_items key (get_items t)
             
 
